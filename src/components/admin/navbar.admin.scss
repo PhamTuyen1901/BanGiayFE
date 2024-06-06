@@ -1,0 +1,22 @@
+.active {
+  color: #00d598;
+}
+li.link {
+  width: 100%;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    height: 1px;
+    width: 0;
+    transition: 0.5s all;
+    background: #00d598;
+  }
+}
+li.link.active {
+  &::after {
+    width: 100%;
+  }
+}

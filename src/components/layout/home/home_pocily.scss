@@ -1,0 +1,47 @@
+.card {
+  transition: 500ms;
+
+  &:hover {
+    transform: translateY(-5px);
+    span::after {
+      visibility: visible;
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+  }
+  span {
+    padding: 10px;
+    border-radius: 100%;
+    position: relative;
+
+    &::after {
+      content: "";
+      visibility: hidden;
+      opacity: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      z-index: -1;
+      margin: -2px;
+      border-radius: inherit;
+      background: linear-gradient(to right, #212121, #fff, #eceff1);
+      transition: all 0.5s;
+    }
+
+    img {
+      max-width: 40px;
+    }
+  }
+}
+// .ant-drawer-close {
+//   transform: translateX(300px);
+// }
+.ant-drawer-header-title {
+  display: flex;
+  justify-content: space-between;
+}
+.ant-drawer-title {
+  order: -1;
+}

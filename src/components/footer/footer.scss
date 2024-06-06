@@ -1,0 +1,33 @@
+.footer-top-item {
+  ul {
+    li {
+      transition: 0.5s all;
+      margin-top: 2px;
+      font-size: 15px;
+      cursor: pointer;
+      &:hover {
+        color: #eceff1;
+      }
+    }
+  }
+  h4 {
+    text-transform: uppercase;
+  }
+}
+.back-to-top {
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
+  z-index: 9;
+  width: 30px;
+  height: 35px;
+  transition: all 0.5s ease-in-out;
+  padding: 5px;
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
+}
