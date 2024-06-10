@@ -138,8 +138,8 @@ const AppNavbar = () => {
           </a>
         </li>
         <li className=" font-semibold text-sm hover:text-[#007bff] duration-500">
-          <Link href="/cart">
-            <Space>TRA CỨU ĐƠN HÀNG</Space>
+          <Link href="/orders">
+            <Space>THÔNG TIN ĐƠN HÀNG</Space>
           </Link>
         </li>
       </ul>

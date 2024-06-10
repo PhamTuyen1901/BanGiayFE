@@ -1,7 +1,7 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
-import { Tooltip } from "antd";
+import { Modal, Rate, Tooltip } from "antd";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types";
 import { useAppDispatch } from "@/lib/hook";
@@ -9,7 +9,21 @@ import { quanLyNguoiDungActions } from "@/lib/features/quanLyNguoiDung/slice";
 import { toast } from "react-toastify";
 import { quanLyNguoiDungServices } from "@/server";
 import { useAuth } from "@/hook";
+import Swal from "sweetalert2";
 export const CardProduct = ({ product }: { product: Product }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const { user } = useAuth();
   const router = useRouter();
   const heartRef = useRef(null);
@@ -35,6 +49,7 @@ export const CardProduct = ({ product }: { product: Product }) => {
           className="h-[250px] rounded-lg  "
           src={product.productImage}
           alt={product.productName}
+          onClick={() => router.push(`products/${product.productId}`)}
         />
         <p>{product.productName.slice(0, 15)}</p>
         <p className="text-red-400">
@@ -42,12 +57,28 @@ export const CardProduct = ({ product }: { product: Product }) => {
         </p>
         <p>FREESHIP</p>
         <div className="flex items-center  justify-between gap-1 w-full  ">
-          <button className="bg-[#eceff1]  active:bg-[#dae3ea] py-[5px] w-[45%] rounded-lg cursor-pointer button_overlay ">
+          <button
+            className="bg-[#eceff1]  active:bg-[#dae3ea] py-[5px] w-[45%] rounded-lg cursor-pointer button_overlay "
+            onClick={showModal}
+          >
             Xem nhanh
           </button>
           <button
             className=" bg-red-500 active:bg-red-800  py-[5px]  w-[45%] rounded-md text-white cursor-pointer button_overlay "
-            onClick={() => router.push(`./products/${product.productId}`)}
+            onClick={() => {
+              if (user) {
+                Swal.fire({
+                  icon: "success",
+                  title: "Sản phẩm đã được thêm vào giỏ hàng !",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+
+                dispatch(quanLyNguoiDungActions.addCart(product));
+              } else {
+                toast.error("Vui lòng đăng nhập trước !");
+              }
+            }}
           >
             Mua ngay
           </button>
@@ -62,6 +93,64 @@ export const CardProduct = ({ product }: { product: Product }) => {
           </div>
         </div>
       </div>
+      <Modal
+        title="Thông tin sản phẩm"
+        open={isModalOpen}
+        footer={false}
+        onCancel={handleCancel}
+        width={600}
+      >
+        <div className="grid grid-cols-3">
+          <div className="col-span-1">
+            <img
+              src={product.productImage}
+              alt={product.productName}
+              className="w-[140px] h-[160px] cursor-pointer"
+              onClick={() => router.push(`products/${product.productId}`)}
+            />
+          </div>
+          <div className="col-span-2">
+            <h4 className="font-semibold">
+              Tên sản phẩm:{product?.productName}
+            </h4>
+            <Rate disabled defaultValue={5} />
+            <div className=" grid grid-cols-3 py-3 ">
+              <p className="font-semibold text-[14px]">
+                Tình trạng:{" "}
+                <span className="font-normal">
+                  {product && product?.productStatus == 1
+                    ? `Còn hàng`
+                    : `Sản phẩm hiện chưa có`}
+                </span>
+              </p>
+              <p className="font-semibold text-[14px]">
+                Thương hiệu:{" "}
+                <span className="font-normal">{product?.productTmName}</span>
+              </p>
+              <p className="font-semibold text-[14px]">
+                Lượt mua:{" "}
+                <span className="font-normal">{product?.productSoldQt}</span>
+              </p>
+              <p className="font-semibold text-[14px]">
+                Khuyễn Mãi:{" "}
+                <span className="font-normal">{product?.productDiscount}%</span>
+              </p>
+            </div>
+            <p className="font-semibold text-[14px]">
+              Thông tin sản phẩm:{" "}
+              <span className="font-normal">
+                {product?.productInfor.slice(0, 50)}
+              </span>
+            </p>
+            <div className="py-3 border-y-[1px] border-[#dee2e6]">
+              <p className="text-[20px] text-red-400 font-semibold">
+                Giá:{" "}
+                {product && parseFloat(product?.productPrice).toLocaleString()}₫{" "}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

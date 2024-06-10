@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 const AppHeader = () => {
   const [isHeaderVisible, setHeaderVisible] = useState(true);
+  const [searchName, setSearchName] = useState("");
   const router = useRouter();
   useEffect(() => {
     const handleScroll = () => {
@@ -50,11 +51,17 @@ const AppHeader = () => {
               <input
                 placeholder="Bạn muốn tìm gì ...?"
                 className=" outline-none bg-[#f4f4f4] w-[400px] py-1 px-3 rounded-lg text-[14px]"
+                value={searchName}
+                onChange={(e) => {
+                  setSearchName(e.target.value);
+                }}
               />
               <button
                 type="submit"
                 className="absolute top-[10%] right-[10px] bg-transparent"
-                onClick={() => router.push("/products")}
+                onClick={() => {
+                  router.push(`/products?productName=${searchName}`);
+                }}
               >
                 <CiSearch className=" text-[20px]" />
               </button>

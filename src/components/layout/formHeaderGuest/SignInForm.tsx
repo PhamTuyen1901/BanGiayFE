@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "@/lib/hook";
 import { getUserInfoThunk } from "@/lib/features/quanLyNguoiDung/thunk";
 import { removeCharactersBeforePipe } from "@/lib/features/quanLyAuth/authSlice";
-export const SignInForm = ({ onFinish, setIsModalOpen }: any) => {
+export const SignInForm = ({ onFinish, setIsModalOpen, form }: any) => {
   const dispatch = useAppDispatch();
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
@@ -36,6 +36,7 @@ export const SignInForm = ({ onFinish, setIsModalOpen }: any) => {
   return (
     <Form
       name="basic"
+      form={form}
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 24 }}
       layout="vertical"

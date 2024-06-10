@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/hook";
 import { useAppDispatch } from "@/lib/hook";
 import { quanLyNguoiDungActions } from "@/lib/features/quanLyNguoiDung/slice";
+import Swal from "sweetalert2";
 const ProductsPage = () => {
   const router = useRouter();
   const { slug }: { slug: string } = useParams();
@@ -51,46 +52,6 @@ const ProductsPage = () => {
     setQuantity(value);
   };
 
-  const booking = async () => {
-    const currentDate = new Date();
-    currentDate.setUTCHours(currentDate.getUTCHours() + 7);
-    const formattedDate = currentDate.toISOString().slice(0, 10);
-    console.log(formattedDate);
-    //@ts-ignore
-    const price =
-      quantity * //@ts-ignore
-      (product?.productPrice * 1 - //@ts-ignore
-        product?.productPrice * 1 * (product?.productDiscount / 100)) *
-      1;
-
-    try {
-      const res = await quanLySanPhamServices.updateProduct(
-        product?.productId,
-        {
-          quantityPurchased: quantity,
-        }
-      );
-      let dataProduct = {
-        userId: user.userId,
-        productId: product?.productId,
-        quantityPurchased: quantity,
-        DatePurchase: formattedDate,
-        Purchased: `${price}`,
-      };
-
-      const { data } = await quanLyDatSanPhamServices.bookingProducts(
-        dataProduct
-      );
-      console.log(data);
-
-      toast.success("Bạn đã đặt hàng thành công!");
-      dispatch(quanLyNguoiDungActions.addReLoad());
-      router.push("/cart");
-    } catch (error) {
-      console.log(error);
-      toast.error("Vui lòng kiểm tra lại thông tin!");
-    }
-  };
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -178,13 +139,32 @@ const ProductsPage = () => {
                   defaultValue={quantity}
                   onChange={onChangeNumber}
                 />
-                <button className="w-[60%] border border-black bg-white duration-500 hover:bg-black hover:text-white rounded-lg">
+                <button
+                  className="w-[60%] border border-black bg-white duration-500 hover:bg-black hover:text-white rounded-lg"
+                  onClick={() => {
+                    if (user) {
+                      Swal.fire({
+                        icon: "success",
+                        title: "Sản phẩm đã được thêm vào giỏ hàng !",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+
+                      dispatch(quanLyNguoiDungActions.addCart(product));
+                    } else {
+                      toast.error("Vui lòng đăng nhập trước !");
+                    }
+                  }}
+                >
                   THÊM VÀO GIỎ HÀNG
                 </button>
               </div>
               <div className="">
                 <button
-                  onClick={booking}
+                  onClick={() => {
+                    dispatch(quanLyNguoiDungActions.addCart(product));
+                    router.push(`cart`);
+                  }}
                   className=" w-full py-[10px] bg-red-400 duration-500 active:bg-red-600 font-semibold text-white rounded-lg"
                 >
                   MUA NGAY

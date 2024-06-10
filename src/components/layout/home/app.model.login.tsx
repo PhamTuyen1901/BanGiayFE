@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { Modal, Tabs } from "antd";
+import { Form, Modal, Tabs } from "antd";
 import { LiaUserEditSolid } from "react-icons/lia";
 
 import ForgetPasswordForm from "../formHeaderGuest/ForgetPasswordForm";
@@ -18,6 +18,7 @@ import { getUserInfoThunk } from "@/lib/features/quanLyNguoiDung/thunk";
 const AppModelLogin = () => {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -26,8 +27,9 @@ const AppModelLogin = () => {
       .unwrap()
       .then(() => {
         dispatch(getUserInfoThunk());
-        toast.success("Đang nhập thành công !");
+        toast.success("Đăng nhập thành công !");
         handleCancel();
+        form.resetFields();
       })
       .catch((error: any) => {
         toast.error("Tài khoản hoặc mật khẩu không chính xác !");
@@ -40,8 +42,9 @@ const AppModelLogin = () => {
       .unwrap()
       .then(() => {
         dispatch(getUserInfoThunk());
-        toast.success("Đăng kí thành công !");
+        toast.success("Đăng ký thành công !");
         handleCancel();
+        form.resetFields();
       })
       .catch((error: any) => {
         toast.error("Email đã được đăng ký!");
@@ -53,7 +56,11 @@ const AppModelLogin = () => {
       label: "Đăng Nhập",
       key: "dangNhap",
       children: (
-        <SignInForm onFinish={onFinishLogin} setIsModalOpen={setIsModalOpen} />
+        <SignInForm
+          onFinish={onFinishLogin}
+          setIsModalOpen={setIsModalOpen}
+          form={form}
+        />
       ),
     },
     {
@@ -64,7 +71,7 @@ const AppModelLogin = () => {
     {
       label: "Đăng ký",
       key: "dangKy",
-      children: <SignUpForm onFinish={onFinishRegister} />,
+      children: <SignUpForm onFinish={onFinishRegister} form={form} />,
     },
   ];
 

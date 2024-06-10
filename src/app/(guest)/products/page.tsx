@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { Breadcrumb, Button, Form, FormProps, Radio, SelectProps } from "antd";
 import { HomeOutlined, ProductOutlined } from "@ant-design/icons";
@@ -13,6 +14,11 @@ import { Product } from "@/types";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<any>();
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("productName");
+  console.log(search);
+
   const router = useRouter();
   const [options, setOptions] = useState([]);
   const onFinish: FormProps<any>["onFinish"] = async (values) => {
@@ -48,7 +54,12 @@ const ProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await quanLySanPhamServices.getAllProducts();
+      console.log(search);
+
+      const { data } =
+        search != null
+          ? await quanLySanPhamServices.searchProducts(`?productName=${search}`)
+          : await quanLySanPhamServices.getAllProducts();
       //@ts-ignore
 
       setProducts(data);
@@ -72,7 +83,7 @@ const ProductsPage = () => {
   useEffect(() => {
     fetchProducts();
     featchProductType();
-  }, []);
+  }, [search]);
   return (
     <div className="mt-5 m-auto w-[1280px] min-h-[500px]">
       <Breadcrumb

@@ -5,7 +5,7 @@ import { PiInstagramLogoLight } from "react-icons/pi";
 import "./footer.scss";
 const AppFooter = () => {
   return (
-    <footer>
+    <footer className="bg-white">
       <div className="border-[ #E8E8F2]  border-t-[1px] mb-5 h-[1px]"></div>
       <div className="grid grid-cols-4 gap-4 m-auto w-[1280px]">
         <div className="footer-top-item">

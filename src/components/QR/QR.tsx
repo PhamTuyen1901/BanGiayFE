@@ -13,7 +13,7 @@ const QR = ({ amount }: any) => {
   const QR = `https://img.vietqr.io/image/${MY_BANK.BANK_ID}-${MY_BANK.ACCOUNT_NO}-${MY_BANK.TEMPLATE}.png?amount=${MY_BANK.AMOUNT}&addInfo=${MY_BANK.DESCRIPTION}&accountName=${MY_BANK.ACCOUNT_NAME}`;
   return (
     <div>
-      <Image src={QR} alt="" height={150} width={150} />
+      <Image src={QR} alt="" height={200} width={200} />
     </div>
   );
 };
