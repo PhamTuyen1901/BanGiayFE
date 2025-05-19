@@ -8,6 +8,7 @@ import StoreProvider from "./StoreProvider";
 
 import "./globals.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
 const RootLayout = ({ children }: React.PropsWithChildren) => (
   <html lang="en">
     <body>
